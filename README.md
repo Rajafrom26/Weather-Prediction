@@ -13,8 +13,8 @@ It provides users with **current conditions, hourly forecasts, and daily highlig
 - 📊 **Daily Highlights**:  
   - UV Index with interpretation (Low, Moderate, High, etc.)  
   - Wind speed and status  
-  - Sunrise & Sunset times (converted to 12-hour format)  
-  - Humidity levels (Dry, Comfortable, Humid)  
+  - Sunrise & Sunset times  
+  - Humidity levels
   - Visibility (Poor, Moderate, Clear)  
   - Air Quality (Good, Moderate, Unhealthy, etc.)  
 - 🎨 **Dynamic Backgrounds & Icons**: Weather conditions mapped to custom icons and backgrounds.  
@@ -35,7 +35,7 @@ It provides users with **current conditions, hourly forecasts, and daily highlig
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/weather-app.git
+   git clone https://github.com/Rajafrom26/Weather-Prediction.git
    cd weather-app
    ```
 
@@ -46,7 +46,7 @@ It provides users with **current conditions, hourly forecasts, and daily highlig
 
 3. Start the development server:
    ```bash
-   npm start
+   npm run dev
    ```
 
 ---
@@ -63,8 +63,8 @@ It provides users with **current conditions, hourly forecasts, and daily highlig
 ---
 
 ## 📸 Screenshots
-- **Dashboard View**: Current conditions + highlights  
-- **Hourly Forecast**: Cards with time, icon, and temperature  
+- **Dashboard View**:![alt text](image.png) 
+- **Hourly Forecast**: ![alt text](image-1.png)
 
 ---
 

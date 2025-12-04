@@ -11,6 +11,8 @@ const SearchContext = ({ children }) => {
 
   const [details, setDetails] = useState([]);
 
+  const [unit, setUnit] = useState("C");
+
   useEffect(() => {
     const interval = setInterval(() => {
       const date = new Date().toLocaleTimeString();
@@ -23,16 +25,26 @@ const SearchContext = ({ children }) => {
   }, []);
 
   const Hour = (timeString = "") => {
-  if (!timeString || !timeString.includes(":")) return timeString;
-  const [hour, minute] = timeString.split(":");
-  let h = parseInt(hour, 10);
-  const ampm = h >= 12 ? "PM" : "AM";
-  h = h % 12 || 12;
-  return `${h}:${minute} ${ampm}`;
-};
+    if (!timeString || !timeString.includes(":")) return timeString;
+    const [hour, minute] = timeString.split(":");
+    let h = parseInt(hour, 10);
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    return `${h}:${minute} ${ampm}`;
+  };
   return (
     <myState.Provider
-      value={[query, setQuery, currentTime, weekName, details, setDetails, Hour]}
+      value={[
+        query,
+        setQuery,
+        currentTime,
+        weekName,
+        details,
+        setDetails,
+        Hour,
+        unit,
+        setUnit
+      ]}
     >
       {children}
     </myState.Provider>

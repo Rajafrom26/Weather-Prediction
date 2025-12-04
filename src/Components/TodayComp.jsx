@@ -1,10 +1,13 @@
 import React, { useContext } from 'react';
 import { myState } from './SearchContext';
 import icons from "../../public/icons/icons";
+import { myContext } from './Contexts';
 
 
 const TodayComp = () => {
-  const [, , , , details, , Hour] = useContext(myState);
+  const [, , , , details, , Hour, unit] = useContext(myState);
+        
+  const [ , , , , convertTemp] = useContext(myContext)
 
   return (
     <div className='cards row m-4'>
@@ -14,7 +17,7 @@ const TodayComp = () => {
           <div key={i} className='hour-card col-lg-1'>
             <p>{Hour(hour.datetime)}</p>
             <img src={iconData.icon} alt={hour.icon} />
-            <p>{hour.temp}°</p>
+            <p>{convertTemp(hour.temp, unit)}</p>
           </div>
         );
       })}

@@ -7,10 +7,20 @@ import Routings from "../Routings/Routings";
 import { myContext } from "./Contexts";
 
 const PredictionComp = () => {
-  const [city, setCity, currentTime, weekName, details, setDetails, Hour] =
-    useContext(myState);
+  const [
+    city,
+    setCity,
+    currentTime,
+    weekName,
+    details,
+    setDetails,
+    Hour,
+    unit,
+    setUnit,
+  ] = useContext(myState);
 
-  const [aqi, humidity, uvindex, visibility] = useContext(myContext)
+  const [aqi, humidity, uvindex, visibility, convertTemp] =
+    useContext(myContext);
 
   useEffect(() => {
     fetchData();
@@ -53,7 +63,7 @@ const PredictionComp = () => {
                   alt={condition}
                   className="img-icon"
                 />
-                <h1>{details.currentConditions?.temp} °C</h1>
+                <h1>{convertTemp(details.currentConditions?.temp, unit)}</h1>
                 <h6>
                   {weekName} {currentTime}
                 </h6>
@@ -62,18 +72,43 @@ const PredictionComp = () => {
                   <p>{details.currentConditions?.conditions}</p>
                   <p>perc : {details.currentConditions?.precip || "Null"}</p>
                 </span>
-                <footer className="adress">
-                  {details.resolvedAddress}
-                </footer>
+                <footer className="adress">{details.resolvedAddress}</footer>
               </div>
             ) : (
               <h2>Enter Correct city: instead of {city}</h2>
             )}
           </div>
           <div className="contain col-lg-9 bg-body-tertiary">
-            <Link to="/today">Today</Link>
-            <Link to="/">Week</Link>
-            <Routings />
+            <nav className="row navbar">
+              <div className="col-lg-9">
+                <Link to="/today" className="today-nav">
+                  Today
+                </Link>
+                <Link to="/" className="week-nav">
+                  Week
+                </Link>
+              </div>
+              <div className="col-lg-3">
+                <button
+                  className={`btn-nav me-2 ${
+                    unit === "C" ? "btn-dark" : "btn-outline-primary"
+                  }`}
+                  onClick={() => setUnit("C")}
+                >
+                  °C
+                </button>
+
+                <button
+                  className={`btn-nav ${
+                    unit === "F" ? "btn-primary" : "btn-outline-primary"
+                  }`}
+                  onClick={() => setUnit("F")}
+                >
+                  °F
+                </button>
+              </div>
+              <Routings />
+            </nav>
 
             <h4 className="mt-5 ms-1">Today's Highlights</h4>
             <div className="row">
