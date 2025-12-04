@@ -14,7 +14,6 @@ createRoot(document.getElementById('root')).render(
     <SearchContext>
       <App />
     </SearchContext>
-    
     </BrowserRouter>
     
   </StrictMode>,

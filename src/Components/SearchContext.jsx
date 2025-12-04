@@ -9,6 +9,8 @@ const SearchContext = ({ children }) => {
   const [currentTime, setTime] = useState(new Date().toLocaleTimeString());
   const [query, setQuery] = useState("Bengaluru,KA");
 
+  const [details, setDetails] = useState([]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       const date = new Date().toLocaleTimeString();
@@ -21,7 +23,9 @@ const SearchContext = ({ children }) => {
   }, []);
 
   return (
-    <myState.Provider value={[query, setQuery, currentTime, weekName]}>
+    <myState.Provider
+      value={[query, setQuery, currentTime, weekName, details, setDetails]}
+    >
       {children}
     </myState.Provider>
   );
