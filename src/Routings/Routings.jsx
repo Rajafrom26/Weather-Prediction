@@ -1,11 +1,13 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import WeekComp from '../Components/WeekComp'
+import TodayComp from '../Components/TodayComp'
 
 function Routings () {
   return (
     <Routes>
       <Route path='/' element={<WeekComp />} />
+      <Route path='/today' element={<TodayComp />} />
     </Routes>
   )
 }

@@ -4,10 +4,13 @@ import { myState } from "./SearchContext";
 import icons from "../../public/icons/icons";
 import { Link } from "react-router-dom";
 import Routings from "../Routings/Routings";
+import { myContext } from "./Contexts";
 
 const PredictionComp = () => {
-  const [city, setCity, currentTime, weekName, details, setDetails] =
+  const [city, setCity, currentTime, weekName, details, setDetails, Hour] =
     useContext(myState);
+
+  const [aqi, humidity, uvindex, visibility] = useContext(myContext)
 
   useEffect(() => {
     fetchData();
@@ -24,11 +27,13 @@ const PredictionComp = () => {
   const weatherData = icons[condition] || icons["default"];
 
   return (
-    <div className="container-fluid">
-      <img src={weatherData.background} alt={condition} className="img-fluid" />
-      <div className="contain">
+    <div
+      className="container-fluid"
+      style={{ backgroundImage: `url(${weatherData.background})` }}
+    >
+      <div className="container">
         <div className="row">
-          <div className="col-lg-3 dev-design position-relative">
+          <div className="col-lg-3 dev-design">
             <input
               type="text"
               name="city"
@@ -43,7 +48,6 @@ const PredictionComp = () => {
 
             {details || details !== details ? (
               <div className="details-design">
-                {/* <h4>Weather for {city}</h4> */}
                 <img
                   src={weatherData.icon}
                   alt={condition}
@@ -58,7 +62,7 @@ const PredictionComp = () => {
                   <p>{details.currentConditions?.conditions}</p>
                   <p>perc : {details.currentConditions?.precip || "Null"}</p>
                 </span>
-                <footer className="position-absolute bottom-0 p-3">
+                <footer className="adress">
                   {details.resolvedAddress}
                 </footer>
               </div>
@@ -66,11 +70,9 @@ const PredictionComp = () => {
               <h2>Enter Correct city: instead of {city}</h2>
             )}
           </div>
-          <div className="container-lg col-lg-9 bg-body-tertiary position-relative">
+          <div className="contain col-lg-9 bg-body-tertiary">
             <Link to="/today">Today</Link>
             <Link to="/">Week</Link>
-            {/* <Link to="/">°C</Link>
-            <Link to="/fahrenheit">°F</Link> */}
             <Routings />
 
             <h4 className="mt-5 ms-1">Today's Highlights</h4>
@@ -81,6 +83,7 @@ const PredictionComp = () => {
                   <h2 className="text-center">
                     {details?.currentConditions?.uvindex}
                   </h2>
+                  <p>{uvindex(details?.currentConditions?.uvindex)}</p>
                 </div>
               </div>
               <div className="col-lg-4">
@@ -89,14 +92,16 @@ const PredictionComp = () => {
                   <h2 className="text-center">
                     {details?.currentConditions?.windspeed}
                   </h2>
+                  <p>km/h</p>
                 </div>
               </div>
               <div className="col-lg-4">
                 <div className="card-des">
                   <h6>Sunrise&sunset</h6>
                   <h2 className="text-center">
-                    {details?.currentConditions?.sunset}
+                    {Hour(details?.currentConditions?.sunset)}
                   </h2>
+                  <p>{Hour(details?.currentConditions?.sunrise)}</p>
                 </div>
               </div>
               <div className="col-lg-4">
@@ -105,6 +110,7 @@ const PredictionComp = () => {
                   <h2 className="text-center">
                     {details?.currentConditions?.humidity}
                   </h2>
+                  <p>{humidity(details?.currentConditions?.humidity)}</p>
                 </div>
               </div>
               <div className="col-lg-4">
@@ -113,6 +119,7 @@ const PredictionComp = () => {
                   <h2 className="text-center">
                     {details?.currentConditions?.visibility}
                   </h2>
+                  <p>{visibility(details?.currentConditions?.visibility)}</p>
                 </div>
               </div>
               <div className="col-lg-4">
@@ -121,10 +128,13 @@ const PredictionComp = () => {
                   <h2 className="text-center">
                     {details?.currentConditions?.feelslike}
                   </h2>
+                  <p>{aqi(details?.currentConditions?.feelslike)}</p>
                 </div>
               </div>
             </div>
-            <footer className="d-flex justify-content-center mt-4">Weather Predicted app by @rajkumar puli</footer>
+            <footer className="d-flex justify-content-center mt-4">
+              Weather Predicted app by @rajkumar puli
+            </footer>
           </div>
         </div>
       </div>

@@ -1,69 +1,84 @@
-
 .container-fluid {
-    margin: 0;
+  margin: 0;
+  /* height: 100%; */
+  height: fit-content;
+  border: 1px solid #ddd;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
-.img-fluid {
-    background-position: center;
-    height: 100vh !important;
-    width: 100%;
-    position: relative;
-}
-.contain {
-    width: 70rem !important;
-    height: 40rem !important;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: black;
+.container {
+  margin: 140px 0 50px 0;
 }
 .img-icon {
-    width: 8rem;
-    height: 5rem;
-     margin: 40px;
+  width: 8rem;
+  height: 5rem;
+  margin: 40px;
 }
 .btn-dev {
-    padding: 20px !important;
-    margin-left: -1px !important;
+  padding: 20px !important;
+  margin-left: -1px !important;
 }
 .form-control {
-    margin-top: 30px;
-    border: none !important;
-    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
-    display: inline-flex !important;
-    width: 60% !important;
+  margin-top: 30px;
+  border: none !important;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+  display: inline-flex !important;
+  width: 60% !important;
 }
 .dev-design {
-    background-color: rgba(255, 255, 255, 0.888) !important;
-    opacity: 0.9;
-    height: 80vh !important;
-    margin: 0 !important;
+  background-color: rgba(255, 255, 255, 0.888) !important;
+  opacity: 0.9;
+  margin: 0;
+  border-radius: 15px 0 0 15px;
+  position: relative;
+}
+.adress {
+  position: absolute;
+  bottom: 20px;
 }
 .card {
-   height: 8rem !important;
-   padding: 10px !important;
-   margin-top: 25px;
-   border: none !important;
-   border-radius: 20px !important;
-   
+  height: 8rem !important;
+  padding: 10px !important;
+  margin-top: 25px;
+  border: none !important;
+  border-radius: 20px !important;
 }
 .img {
-    height: 4rem !important;
-    width: 4rem !important;
-    padding: 10px 0 10px 0;
+  height: 4rem !important;
+  width: 4rem !important;
+  padding: 10px 0 10px 0;
 }
 .card-row {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-top: 30px;
-    
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 30px;
 }
 .card-des {
-    background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
-    padding: 15px;
-    border-radius: 10px;
-    margin: 10px;
-    color: #333;
+  background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+  padding: 15px;
+  border-radius: 10px;
+  margin: 10px;
+  color: #333;
+}
+.cards {
+  gap: 40px;
+}
 
+.hour-card {
+  background: linear-gradient(135deg, #d4d7de 0%, #e4e8e88a 100%);
+  color: black;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.hour-card img {
+  width: 40px;
+  height: 30px;
+  margin: 0;
+}
+.contain {
+    border-radius: 0 15px 15px 0;
 }

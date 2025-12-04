@@ -22,9 +22,17 @@ const SearchContext = ({ children }) => {
     return () => clearInterval(interval);
   }, []);
 
+  const Hour = (timeString = "") => {
+  if (!timeString || !timeString.includes(":")) return timeString;
+  const [hour, minute] = timeString.split(":");
+  let h = parseInt(hour, 10);
+  const ampm = h >= 12 ? "PM" : "AM";
+  h = h % 12 || 12;
+  return `${h}:${minute} ${ampm}`;
+};
   return (
     <myState.Provider
-      value={[query, setQuery, currentTime, weekName, details, setDetails]}
+      value={[query, setQuery, currentTime, weekName, details, setDetails, Hour]}
     >
       {children}
     </myState.Provider>
