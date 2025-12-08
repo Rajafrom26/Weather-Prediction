@@ -27,12 +27,16 @@ const PredictionComp = () => {
   }, []);
 
   const fetchData = async () => {
+  try {
     const { data } = await axios.get(
       `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=EJ6UBL2JEQGYB3AA4ENASN62J&contentType=json`
     );
     setDetails(data);
-  };
-
+  } catch (error) {
+    console.log(error);
+    alert(`Could not find weather data for "${city}". Please check the spelling.`);
+  }
+};
   const condition = details?.currentConditions?.icon;
   const weatherData = icons[condition] || icons["default"];
 
@@ -56,7 +60,7 @@ const PredictionComp = () => {
               onClick={fetchData}
             ></button>
 
-            {details || details !== details ? (
+            {details && (
               <div className="details-design">
                 <img
                   src={weatherData.icon}
@@ -74,13 +78,11 @@ const PredictionComp = () => {
                 </span>
                 <footer className="adress">{details.resolvedAddress}</footer>
               </div>
-            ) : (
-              <h2>Enter Correct city: instead of {city}</h2>
             )}
           </div>
           <div className="contain col-lg-9 bg-body-tertiary">
             <nav className="row navbar">
-              <div className="col-lg-9">
+              <div className="col-md-9 medium">
                 <Link to="/today" className="today-nav">
                   Today
                 </Link>
@@ -88,7 +90,7 @@ const PredictionComp = () => {
                   Week
                 </Link>
               </div>
-              <div className="col-lg-3">
+              <div className="col-md-3 medium">
                 <button
                   className={`btn-nav me-2 ${
                     unit === "C" ? "btn-dark" : "btn-outline-primary"
