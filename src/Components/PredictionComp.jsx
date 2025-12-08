@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { myState } from "./SearchContext";
 import icons from "../../public/icons/icons";
 import { Link } from "react-router-dom";
@@ -7,6 +7,10 @@ import Routings from "../Routings/Routings";
 import { myContext } from "./Contexts";
 
 const PredictionComp = () => {
+
+    const inputRef = useRef(null)    
+
+
   const [
     city,
     setCity,
@@ -32,9 +36,15 @@ const PredictionComp = () => {
       `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=EJ6UBL2JEQGYB3AA4ENASN62J&contentType=json`
     );
     setDetails(data);
+    if(inputRef.current) {
+      inputRef.current.value = "" ;
+    }
   } catch (error) {
     console.log(error);
     alert(`Could not find weather data for "${city}". Please check the spelling.`);
+    if(inputRef.current) {
+      inputRef.current.value = "" ;
+    }
   }
 };
   const condition = details?.currentConditions?.icon;
@@ -52,6 +62,7 @@ const PredictionComp = () => {
               type="text"
               name="city"
               placeholder="Type city here"
+              ref={inputRef}
               onChange={(e) => setCity(e.target.value)}
               className="form-control ms-3 p-2"
             />

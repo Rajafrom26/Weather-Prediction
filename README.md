@@ -6,6 +6,12 @@ It provides users with **current conditions, hourly forecasts, and daily highlig
 
 ---
 
+
+## 🚀 Live Demo
+Check out the deployed app here: [Weather Prediction App](https://weather-prediction-tau.vercel.app/)
+
+---
+
 ## 🚀 Features
 - 🔍 **City Search**: Enter any city to get live weather data.  
 - 🕒 **Current Time & Day**: Auto-updates every second using React Context.  
@@ -63,8 +69,8 @@ It provides users with **current conditions, hourly forecasts, and daily highlig
 ---
 
 ## 📸 Screenshots
-- **Dashboard View**:![alt text](image.png) 
-- **Hourly Forecast**: ![alt text](image-1.png)
+- **Dashboard View**:![alt text](public/icons//image.png) 
+- **Hourly Forecast**: ![alt text](public/icons/image-1.png)
 
 ---
 
