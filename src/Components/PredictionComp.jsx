@@ -5,11 +5,11 @@ import icons from "../../public/icons/icons";
 import { Link } from "react-router-dom";
 import Routings from "../Routings/Routings";
 import { myContext } from "./Contexts";
+import CityNotFound from "./CityNotFound";
 
 const PredictionComp = () => {
 
-    const inputRef = useRef(null)    
-
+    const inputRef = useRef(null)
 
   const [
     city,
@@ -40,7 +40,6 @@ const PredictionComp = () => {
       inputRef.current.value = "" ;
     }
   } catch (error) {
-    console.log(error);
     alert(`Could not find weather data for "${city}". Please check the spelling.`);
     if(inputRef.current) {
       inputRef.current.value = "" ;
@@ -67,7 +66,7 @@ const PredictionComp = () => {
               className="form-control ms-3 p-2"
             />
             <button
-              className="btn btn-primary btn-dev"
+              className={`btn btn-dev`}
               onClick={fetchData}
             ></button>
 
@@ -104,7 +103,7 @@ const PredictionComp = () => {
               <div className="col-md-3 medium">
                 <button
                   className={`btn-nav me-2 ${
-                    unit === "C" ? "btn-dark" : "btn-outline-primary"
+                    unit === "C" ? "btn rounded rounded-5 btn-dark " : "btn-light"
                   }`}
                   onClick={() => setUnit("C")}
                 >
@@ -112,10 +111,10 @@ const PredictionComp = () => {
                 </button>
 
                 <button
-                  className={`btn-nav ${
-                    unit === "F" ? "btn-primary" : "btn-outline-primary"
-                  }`}
                   onClick={() => setUnit("F")}
+                  className={`btn-nav ${
+                    unit === "F" ? "btn rounded rounded-5 btn-dark" : "btn-light"
+                  }`}
                 >
                   °F
                 </button>

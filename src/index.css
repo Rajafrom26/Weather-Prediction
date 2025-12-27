@@ -17,7 +17,9 @@
 }
 .btn-dev {
   padding: 20px !important;
-  margin-left: -1px !important;
+  margin-left: -7px !important;
+  margin-top: -4px;
+  background-color: rgba(6, 112, 169, 0.888) !important;
 }
 .form-control {
   margin-top: 30px;
@@ -88,20 +90,59 @@
   text-align: center;
 }
 .today-nav {
-  padding: 20px;
+  position: relative;
+  display: inline-block; /* ensures underline matches text width */
+  padding: 5px 0;
   text-decoration: none;
   color: black;
   font-size: 1.2rem;
 }
+
+.today-nav::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0; /* sits at bottom of text */
+  width: 100%;
+  height: 2px; /* thickness of line */
+  background-color: black;
+  transform: scaleX(0); /* hidden initially */
+  transform-origin: center; /* starts from middle */
+  transition: transform 0.3s ease;
+}
+
+.today-nav:hover::after {
+  transform: scaleX(1); /* expands to full width */
+}
+
 .week-nav {
+  position: relative;
+  display: inline-block; /* ensures underline matches text width */
+  padding: 5px 0;
   text-decoration: none;
   color: black;
+  margin-left: 10px;
   font-size: 1.2rem;
 }
+.week-nav::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0; /* sits at bottom of text */
+  width: 100%;
+  height: 2px; /* thickness of line */
+  background-color: black;
+  transform: scaleX(0); /* hidden initially */
+  transform-origin: center; /* starts from middle */
+  transition: transform 0.3s ease;
+}
+.week-nav:hover::after {
+  transform: scaleX(1); /* expands to full width */
+}
+
 .btn-nav {
   border: none;
   border-radius: 50%;
-  background-color: white;
   padding: 10px 15px 10px 15px;
   font-weight: bold;
 }
