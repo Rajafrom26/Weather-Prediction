@@ -1,6 +1,5 @@
-import React, { createContext } from "react";
-
-export const myContext = createContext();
+import React from "react";
+import  MyContext  from "../Contexts/myContext.jsx";
 
 const Contexts = ({ children }) => {
   const getAirQualityDescription = (aqi) => {
@@ -39,7 +38,7 @@ const Contexts = ({ children }) => {
   return `${((temp * 9) / 5 + 32).toFixed(1)} °F`;
 };
   return (
-    <myContext.Provider
+    <MyContext.Provider
       value={[
         getAirQualityDescription,
         getHumidityDescription,
@@ -49,7 +48,8 @@ const Contexts = ({ children }) => {
       ]}
     >
       {children}
-    </myContext.Provider>
+    </MyContext.Provider>
+    
   );
 };
 

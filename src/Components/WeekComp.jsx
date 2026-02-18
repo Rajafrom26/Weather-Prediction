@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { myState } from "./SearchContext";
 import icons from "../../public/icons/icons";
-import { myContext } from "./Contexts";
+import myContext from "../Contexts/myContext.jsx";
+import  myState  from "../Contexts/myState.jsx";
 
 const WeekComp = () => {
   const [, , , , details, , , unit ] = useContext(myState);

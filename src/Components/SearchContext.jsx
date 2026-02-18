@@ -1,6 +1,7 @@
-import React, { children, createContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import  MyState  from "../Contexts/myState";
 
-export const myState = createContext();
+
 
 const SearchContext = ({ children }) => {
   const [weekName, setWeekName] = useState(
@@ -33,7 +34,7 @@ const SearchContext = ({ children }) => {
     return `${h}:${minute} ${ampm}`;
   };
   return (
-    <myState.Provider
+    <MyState.Provider
       value={[
         query,
         setQuery,
@@ -47,7 +48,7 @@ const SearchContext = ({ children }) => {
       ]}
     >
       {children}
-    </myState.Provider>
+    </MyState.Provider>
   );
 };
 

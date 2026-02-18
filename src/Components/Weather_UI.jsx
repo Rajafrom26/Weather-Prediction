@@ -1,0 +1,246 @@
+import axios from "axios";
+import React, {  useCallback, useContext, useEffect, useRef, useState } from "react";
+import icons from "../../public/icons/icons";
+import { Link } from "react-router-dom";
+import Routings from "../Routings/Routings";
+import { toast } from "sonner";
+import  myState  from "../Contexts/myState";
+import  myContext  from "../Contexts/myContext";
+
+const Weather_UI = () => {
+  const inputRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+
+  const [
+    city,
+    setCity,
+    currentTime,
+    weekName,
+    details,
+    setDetails,
+    Hour,
+    unit,
+    setUnit,
+  ] = useContext(myState);
+
+  const [aqi, humidity, uvindex, visibility, convertTemp] =
+    useContext(myContext);
+
+const fetchData = useCallback(async () => {
+  if (!city?.trim()) {
+    toast.warning("Please enter a city name");
+    return;
+  }
+
+  setLoading(true);
+  const toastId = toast.loading("Fetching weather data...");
+
+  try {
+    const { data } = await axios.get(
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=EJ6UBL2JEQGYB3AA4ENASN62J&contentType=json`
+    );
+
+    setDetails(data);
+    toast.success(`Weather loaded for ${data.resolvedAddress}`, { id: toastId });
+    
+    // Clear input after success
+    if (inputRef.current) inputRef.current.value = "";
+
+  } catch (err) {
+    toast.error(`Could not find weather data for "${city}"`, { id: toastId });
+  } finally {
+    setLoading(false);
+  }
+}, [city, setDetails]);
+
+useEffect(() => {
+  if (city?.trim("")) {
+    fetchData();
+  }
+}, [fetchData]);
+
+//-----------------------------------------------------------------------------------------------------
+//  const fetchData = useCallback(async() => {
+//   try{
+//     const { data } = await axios.get(
+//     // `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=EJ6UBL2JEQGYB3AA4ENASN62J&contentType=json`
+//   )
+//   setDetails(data)
+//   toast.success(`succesfully fetched`)
+//   }
+//   catch {
+//     toast.error("could not found any city")
+//   }
+// },[])
+// useEffect(()=>{
+//   fetchData()
+// },[])
+// ---------------------------------------------------------------------------------------------------------
+
+  const condition = details?.currentConditions?.icon;
+  const weatherData = icons[condition] || icons["default"];
+
+  return (
+    <div
+      className="container-fluid min-vh-100 d-flex flex-column"
+      style={{ backgroundImage: `url(${weatherData.background})` }}
+    >
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-3 dev-design">
+            <input
+              type="text"
+              placeholder="Type city here"
+              ref={inputRef}
+              onChange={(e) => setCity(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && fetchData()}
+              className="form-control ms-3 p-2"
+            />
+
+            <button
+              className="btn btn-dev"
+              onClick={fetchData}
+              disabled={loading}
+            >
+            </button>
+
+            {details && (
+              <div className="details-design">
+                <img
+                  src={weatherData.icon}
+                  alt={condition}
+                  className="img-icon"
+                />
+                <h1>
+                  {convertTemp(details.currentConditions?.temp, unit)}
+                </h1>
+                <h6>
+                  {weekName} {currentTime}
+                </h6>
+                <hr />
+                <span className="text-design d-grid justify-content-center text-black">
+                  <p>{details.currentConditions?.conditions}</p>
+                  <p>
+                    perc :{" "}
+                    {details.currentConditions?.precip ?? "Null"}
+                  </p>
+                </span>
+                <footer className="adress">
+                  {details.resolvedAddress}
+                </footer>
+              </div>
+            )}
+          </div>
+
+          <div className="contain col-lg-9 bg-body-tertiary">
+            <nav className="row navbar">
+              <div className="col-md-9 medium">
+                <Link to="/today" className="today-nav">
+                  Today
+                </Link>
+                <Link to="/" className="week-nav">
+                  Week
+                </Link>
+              </div>
+
+              <div className="col-md-3 medium">
+                <button
+                  className={`btn-nav me-2 ${
+                    unit === "C"
+                      ? "btn rounded-5 btn-dark"
+                      : "btn-light"
+                  }`}
+                  onClick={() => {
+                    setUnit("C");
+                    toast.info("Switched to Celsius");
+                  }}
+                >
+                  °C
+                </button>
+
+                <button
+                  onClick={() => {
+                    setUnit("F");
+                    toast.info("Switched to Fahrenheit");
+                  }}
+                  className={`btn-nav ${
+                    unit === "F"
+                      ? "btn rounded-5 btn-dark"
+                      : "btn-light"
+                  }`}
+                >
+                  °F
+                </button>
+              </div>
+
+              <Routings />
+            </nav>
+
+            <h4 className="mt-5 ms-1">Today's Highlights</h4>
+
+            <div className="row">
+              {[
+                {
+                  title: "UV Index",
+                  value: details?.currentConditions?.uvindex,
+                  desc: uvindex(
+                    details?.currentConditions?.uvindex
+                  ),
+                },
+                {
+                  title: "Wind Status",
+                  value: details?.currentConditions?.windspeed,
+                  desc: "km/h",
+                },
+                {
+                  title: "Sunset",
+                  value: Hour(
+                    details?.currentConditions?.sunset
+                  ),
+                  desc: Hour(
+                    details?.currentConditions?.sunrise
+                  ),
+                },
+                {
+                  title: "Humidity",
+                  value: details?.currentConditions?.humidity,
+                  desc: humidity(
+                    details?.currentConditions?.humidity
+                  ),
+                },
+                {
+                  title: "Visibility",
+                  value: details?.currentConditions?.visibility,
+                  desc: visibility(
+                    details?.currentConditions?.visibility
+                  ),
+                },
+                {
+                  title: "Air Quality",
+                  value: details?.currentConditions?.feelslike,
+                  desc: aqi(
+                    details?.currentConditions?.feelslike
+                  ),
+                },
+              ].map((item, index) => (
+                <div className="col-lg-4" key={index}>
+                  <div className="card-des">
+                    <h6>{item.title}</h6>
+                    <h2 className="text-center">{item.value}</h2>
+                    <p>{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <footer className="d-flex justify-content-center mt-4">
+              Weather Predicted app by @rajkumar puli
+            </footer>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Weather_UI;

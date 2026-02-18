@@ -1,7 +1,8 @@
-import { useState } from "react";
+import React from "react";
 import PredictionComp from "./Components/PredictionComp";
 import '../src/index.css'
-import Routings from "./Routings/Routings";
+import '../src/responsive.css'
+import { Toaster } from "sonner";
 
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
   return(
     <>
     <PredictionComp />
+    <Toaster position="top-center" richColors />
     </>
   )
 }
