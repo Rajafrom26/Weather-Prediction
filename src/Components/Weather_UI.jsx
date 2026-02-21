@@ -1,11 +1,17 @@
 import axios from "axios";
-import React, {  useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import icons from "../../public/icons/icons";
 import { Link } from "react-router-dom";
 import Routings from "../Routings/Routings";
 import { toast } from "sonner";
-import  myState  from "../Contexts/myState";
-import  myContext  from "../Contexts/myContext";
+import myState from "../Contexts/myState";
+import myContext from "../Contexts/myContext";
 
 const Weather_UI = () => {
   const inputRef = useRef(null);
@@ -26,56 +32,39 @@ const Weather_UI = () => {
   const [aqi, humidity, uvindex, visibility, convertTemp] =
     useContext(myContext);
 
-const fetchData = useCallback(async () => {
-  if (!city?.trim()) {
-    toast.warning("Please enter a city name");
-    return;
-  }
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    const toastId = toast.loading("Fetching weather data...");
+    try {
+      const { data } = await axios.get(
+        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=EJ6UBL2JEQGYB3AA4ENASN62J&contentType=json`,
+      );
 
-  setLoading(true);
-  const toastId = toast.loading("Fetching weather data...");
+      setDetails(data);
+      toast.success(`Weather loaded for ${data.resolvedAddress}`, {
+        id: toastId,
+      });
+      if (inputRef.current) inputRef.current.value = "";
+    } catch {
+      toast.error(`Could not find weather data for "${city}"`, { id: toastId });
+      if (!city?.trim()) {
+        toast.warning("Please enter a city name");
+        return;
+      }
+      if (inputRef.current) inputRef.current.value = "";
+    } finally {
+      setLoading(false);
+    }
+  }, [city, setDetails]);
 
-  try {
-    const { data } = await axios.get(
-      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=EJ6UBL2JEQGYB3AA4ENASN62J&contentType=json`
-    );
+  const hasFetched = useRef(false);
 
-    setDetails(data);
-    toast.success(`Weather loaded for ${data.resolvedAddress}`, { id: toastId });
-    
-    // Clear input after success
-    if (inputRef.current) inputRef.current.value = "";
+  useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
 
-  } catch (err) {
-    toast.error(`Could not find weather data for "${city}"`, { id: toastId });
-  } finally {
-    setLoading(false);
-  }
-}, [city, setDetails]);
-
-useEffect(() => {
-  if (city?.trim("")) {
     fetchData();
-  }
-}, [fetchData]);
-
-//-----------------------------------------------------------------------------------------------------
-//  const fetchData = useCallback(async() => {
-//   try{
-//     const { data } = await axios.get(
-//     // `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=EJ6UBL2JEQGYB3AA4ENASN62J&contentType=json`
-//   )
-//   setDetails(data)
-//   toast.success(`succesfully fetched`)
-//   }
-//   catch {
-//     toast.error("could not found any city")
-//   }
-// },[])
-// useEffect(()=>{
-//   fetchData()
-// },[])
-// ---------------------------------------------------------------------------------------------------------
+  }, []);
 
   const condition = details?.currentConditions?.icon;
   const weatherData = icons[condition] || icons["default"];
@@ -101,8 +90,7 @@ useEffect(() => {
               className="btn btn-dev"
               onClick={fetchData}
               disabled={loading}
-            >
-            </button>
+            ></button>
 
             {details && (
               <div className="details-design">
@@ -111,23 +99,16 @@ useEffect(() => {
                   alt={condition}
                   className="img-icon"
                 />
-                <h1>
-                  {convertTemp(details.currentConditions?.temp, unit)}
-                </h1>
+                <h1>{convertTemp(details.currentConditions?.temp, unit)}</h1>
                 <h6>
                   {weekName} {currentTime}
                 </h6>
                 <hr />
                 <span className="text-design d-grid justify-content-center text-black">
                   <p>{details.currentConditions?.conditions}</p>
-                  <p>
-                    perc :{" "}
-                    {details.currentConditions?.precip ?? "Null"}
-                  </p>
+                  <p>perc : {details.currentConditions?.precip ?? "Null"}</p>
                 </span>
-                <footer className="adress">
-                  {details.resolvedAddress}
-                </footer>
+                <footer className="adress">{details.resolvedAddress}</footer>
               </div>
             )}
           </div>
@@ -146,9 +127,7 @@ useEffect(() => {
               <div className="col-md-3 medium">
                 <button
                   className={`btn-nav me-2 ${
-                    unit === "C"
-                      ? "btn rounded-5 btn-dark"
-                      : "btn-light"
+                    unit === "C" ? "btn rounded-5 btn-dark" : "btn-light"
                   }`}
                   onClick={() => {
                     setUnit("C");
@@ -164,9 +143,7 @@ useEffect(() => {
                     toast.info("Switched to Fahrenheit");
                   }}
                   className={`btn-nav ${
-                    unit === "F"
-                      ? "btn rounded-5 btn-dark"
-                      : "btn-light"
+                    unit === "F" ? "btn rounded-5 btn-dark" : "btn-light"
                   }`}
                 >
                   °F
@@ -183,9 +160,7 @@ useEffect(() => {
                 {
                   title: "UV Index",
                   value: details?.currentConditions?.uvindex,
-                  desc: uvindex(
-                    details?.currentConditions?.uvindex
-                  ),
+                  desc: uvindex(details?.currentConditions?.uvindex),
                 },
                 {
                   title: "Wind Status",
@@ -194,33 +169,23 @@ useEffect(() => {
                 },
                 {
                   title: "Sunset",
-                  value: Hour(
-                    details?.currentConditions?.sunset
-                  ),
-                  desc: Hour(
-                    details?.currentConditions?.sunrise
-                  ),
+                  value: Hour(details?.currentConditions?.sunset),
+                  desc: Hour(details?.currentConditions?.sunrise),
                 },
                 {
                   title: "Humidity",
                   value: details?.currentConditions?.humidity,
-                  desc: humidity(
-                    details?.currentConditions?.humidity
-                  ),
+                  desc: humidity(details?.currentConditions?.humidity),
                 },
                 {
                   title: "Visibility",
                   value: details?.currentConditions?.visibility,
-                  desc: visibility(
-                    details?.currentConditions?.visibility
-                  ),
+                  desc: visibility(details?.currentConditions?.visibility),
                 },
                 {
                   title: "Air Quality",
                   value: details?.currentConditions?.feelslike,
-                  desc: aqi(
-                    details?.currentConditions?.feelslike
-                  ),
+                  desc: aqi(details?.currentConditions?.feelslike),
                 },
               ].map((item, index) => (
                 <div className="col-lg-4" key={index}>
