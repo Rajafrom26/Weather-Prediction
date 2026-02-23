@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -12,6 +13,7 @@ import Routings from "../Routings/Routings";
 import { toast } from "sonner";
 import myState from "../Contexts/myState";
 import myContext from "../Contexts/myContext";
+import WeatherLoader from "./WeatherLoader"
 
 const Weather_UI = () => {
   const inputRef = useRef(null);
@@ -36,21 +38,31 @@ const Weather_UI = () => {
     setLoading(true);
     const toastId = toast.loading("Fetching weather data...");
     try {
-      const { data } = await axios.get(
+      const apiCall = await axios.get(
         `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=EJ6UBL2JEQGYB3AA4ENASN62J&contentType=json`,
       );
+      
+       const delay = new Promise(resolve =>
+      setTimeout(resolve, 10000)
+    );
+
+    const [{ data }] = await Promise.all([apiCall, delay]);
 
       setDetails(data);
+
       toast.success(`Weather loaded for ${data.resolvedAddress}`, {
         id: toastId,
       });
+
       if (inputRef.current) inputRef.current.value = "";
+
     } catch {
       toast.error(`Could not find weather data for "${city}"`, { id: toastId });
       if (!city?.trim()) {
         toast.warning("Please enter a city name");
         return;
       }
+
       if (inputRef.current) inputRef.current.value = "";
     } finally {
       setLoading(false);
@@ -66,8 +78,14 @@ const Weather_UI = () => {
     fetchData();
   }, []);
 
-  const condition = details?.currentConditions?.icon;
-  const weatherData = icons[condition] || icons["default"];
+  const weatherData = useMemo(() => {
+    const condition = details?.currentConditions?.icon;
+    return icons[condition] || icons["default"];
+  }, [details]);
+   
+  if (loading) {
+    return <WeatherLoader />;
+  }
 
   return (
     <div
@@ -96,7 +114,7 @@ const Weather_UI = () => {
               <div className="details-design">
                 <img
                   src={weatherData.icon}
-                  alt={condition}
+                  alt={weatherData.condition}
                   className="img-icon"
                 />
                 <h1>{convertTemp(details.currentConditions?.temp, unit)}</h1>
