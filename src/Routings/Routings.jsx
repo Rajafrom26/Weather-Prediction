@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import WeekComp from '../Components/WeekComp'
-import TodayComp from '../Components/TodayComp'
+import WeekComp from '../routeComponents/WeekComp'
+import TodayComp from '../routeComponents/TodayComp'
 
 function Routings () {
   return (

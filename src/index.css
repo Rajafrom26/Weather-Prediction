@@ -1,4 +1,3 @@
-html,
 body,
 #root {
   margin: 0;
@@ -13,25 +12,36 @@ body,
   background-repeat: no-repeat;
 }
 .container {
-  margin: 30px 0 20px 0;
+  width: 90%; /* Or any fixed width like 600px */
+  margin: 30px auto 20px auto; 
 }
 .img-icon {
   width: 8rem;
   height: 5rem;
-  margin: 40px;
+  display: block;
+  margin: 50px auto;
 }
 .btn-dev {
-  padding: 20px !important;
-  margin-left: -7px !important;
-  margin-top: -4px;
-  background-color: rgba(6, 112, 169, 0.888) !important;
+  background-color: #2384c9;
+  color: white;
+  border: none;
+  padding: 7px;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
 }
 .form-control {
-  margin-top: 30px;
-  border: none !important;
+  margin: 25px 0 0 25px;
+  border: none;
   box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
-  display: inline-flex !important;
-  width: 60% !important;
+  display: inline-flex;
+  width: 60%;
+  border-radius: 10px 0 0 10px;
+  padding: 7px;
+}
+.form-control:focus {
+  outline: none;
+  box-shadow: 0 6px 16px rgba(6, 112, 169, 0.35);
 }
 .dev-design {
   background-color: rgba(255, 255, 255, 0.888) !important;
@@ -45,11 +55,11 @@ body,
   bottom: 20px;
 }
 .card {
-  height: 8rem !important;
-  padding: 10px !important;
+  height: 8rem;
+  padding: 10px;
   margin-top: 25px;
-  border: none !important;
-  border-radius: 20px !important;
+  border: none;
+  border-radius: 20px;
 }
 .img {
   height: 4rem;
@@ -64,22 +74,25 @@ body,
   color: #333;
 }
 .cards {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  display: flex;
+  flex-wrap: wrap;       /* Allows cards to move to the next line if screen is small */
+  justify-content: center; /* Centers the cards in the middle of the screen */
+  gap: 15px;             /* Space between cards */
+  margin: 20px;
 }
-
 .hour-card {
+  flex: 1; /* Forces all cards to be equal width */
   background: linear-gradient(135deg, #d4d7de 0%, #e4e8e88a 100%);
   color: black;
   border-radius: 12px;
-  padding: 10px;
+  padding: 15px 10px; /* Increased top/bottom padding for breathing room */
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Softened the shadow for a cleaner look */
+  transition: transform 0.2s ease; /* Adds a nice hover effect later */
 }
 .hour-card img {
-  width: 40px;
-  height: 30px;
+  width: 50px;
+  height: 35px;
   margin: 0;
 }
 .contain {
@@ -93,7 +106,6 @@ body,
   margin: 25px 0 !important;
   flex-wrap: wrap;
 }
-
 .card-week {
   background: #ffffff;
   padding: 10px;
@@ -102,7 +114,6 @@ body,
   text-align: center;
   min-width: 120px;
 }
-
 .today-nav {
   position: relative;
   display: inline-block; /* ensures underline matches text width */
@@ -111,7 +122,6 @@ body,
   color: black;
   font-size: 1.2rem;
 }
-
 .today-nav::after {
   content: "";
   position: absolute;
@@ -124,11 +134,9 @@ body,
   transform-origin: center; /* starts from middle */
   transition: transform 0.3s ease;
 }
-
 .today-nav:hover::after {
   transform: scaleX(1); /* expands to full width */
 }
-
 .week-nav {
   position: relative;
   display: inline-block; /* ensures underline matches text width */
@@ -153,7 +161,6 @@ body,
 .week-nav:hover::after {
   transform: scaleX(1); /* expands to full width */
 }
-
 .btn-nav {
   border: none;
   border-radius: 50%;

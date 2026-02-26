@@ -1,91 +1,37 @@
-import axios from "axios";
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import icons from "../../public/icons/icons";
-import { Link } from "react-router-dom";
-import Routings from "../Routings/Routings";
-import { toast } from "sonner";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import myState from "../Contexts/myState";
-import myContext from "../Contexts/myContext";
-import WeatherLoader from "./WeatherLoader"
+import MyContext from "../Contexts/myContext";
+import Routings from "../Routings/Routings";
+import icons from "../../public/icons/icons";
+import WeatherContext from "../Contexts/WeatherContext";
+import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 const Weather_UI = () => {
-  const inputRef = useRef(null);
-  const [loading, setLoading] = useState(false);
-
+  const inputRef = React.useRef(null);
+  const [input, setInput] = useState("");
+  const [, setCity, currentTime, weekName, details, , Hour, unit, setUnit] =
+    useContext(myState);
   const [
-    city,
-    setCity,
-    currentTime,
-    weekName,
-    details,
-    setDetails,
-    Hour,
-    unit,
-    setUnit,
-  ] = useContext(myState);
+    getAirQualityDescription,
+    getHumidityDescription,
+    getUVDescription,
+    getVisibilityDescription,
+    convertTemp,
+  ] = useContext(MyContext);
 
-  const [aqi, humidity, uvindex, visibility, convertTemp] =
-    useContext(myContext);
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    const toastId = toast.loading("Fetching weather data...");
-    try {
-      const apiCall = await axios.get(
-        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=EJ6UBL2JEQGYB3AA4ENASN62J&contentType=json`,
-      );
-      
-       const delay = new Promise(resolve =>
-      setTimeout(resolve, 10000)
-    );
-
-    const [{ data }] = await Promise.all([apiCall, delay]);
-
-      setDetails(data);
-
-      toast.success(`Weather loaded for ${data.resolvedAddress}`, {
-        id: toastId,
-      });
-
-      if (inputRef.current) inputRef.current.value = "";
-
-    } catch {
-      toast.error(`Could not find weather data for "${city}"`, { id: toastId });
-      if (!city?.trim()) {
-        toast.warning("Please enter a city name");
-        return;
-      }
-
-      if (inputRef.current) inputRef.current.value = "";
-    } finally {
-      setLoading(false);
-    }
-  }, [city, setDetails]);
-
-  const hasFetched = useRef(false);
-
-  useEffect(() => {
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
-    fetchData();
-  }, []);
+  const [loading, , fetchData] = useContext(WeatherContext);
 
   const weatherData = useMemo(() => {
     const condition = details?.currentConditions?.icon;
     return icons[condition] || icons["default"];
   }, [details]);
-   
-  if (loading) {
-    return <WeatherLoader />;
+
+  useEffect(() => {
+  if (!loading && details) {
+    setInput("");
   }
+}, [loading, details]);
 
   return (
     <div
@@ -98,17 +44,29 @@ const Weather_UI = () => {
             <input
               type="text"
               placeholder="Type city here"
-              ref={inputRef}
-              onChange={(e) => setCity(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && fetchData()}
-              className="form-control ms-3 p-2"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  if (!input.trim()) return;
+                  setCity(input.trim());
+                  fetchData();
+                }
+              }}
+              className="form-control"
             />
 
             <button
-              className="btn btn-dev"
-              onClick={fetchData}
+              className="btn-dev"
+              onClick={() => {
+                if (!input.trim()) return;
+                setCity(input.trim());
+                fetchData();
+              }}
               disabled={loading}
-            ></button>
+            >
+              Search
+            </button>
 
             {details && (
               <div className="details-design">
@@ -178,7 +136,7 @@ const Weather_UI = () => {
                 {
                   title: "UV Index",
                   value: details?.currentConditions?.uvindex,
-                  desc: uvindex(details?.currentConditions?.uvindex),
+                  desc: getUVDescription(details?.currentConditions?.uvindex),
                 },
                 {
                   title: "Wind Status",
@@ -193,17 +151,23 @@ const Weather_UI = () => {
                 {
                   title: "Humidity",
                   value: details?.currentConditions?.humidity,
-                  desc: humidity(details?.currentConditions?.humidity),
+                  desc: getHumidityDescription(
+                    details?.currentConditions?.humidity,
+                  ),
                 },
                 {
                   title: "Visibility",
                   value: details?.currentConditions?.visibility,
-                  desc: visibility(details?.currentConditions?.visibility),
+                  desc: getVisibilityDescription(
+                    details?.currentConditions?.visibility,
+                  ),
                 },
                 {
                   title: "Air Quality",
                   value: details?.currentConditions?.feelslike,
-                  desc: aqi(details?.currentConditions?.feelslike),
+                  desc: getAirQualityDescription(
+                    details?.currentConditions?.feelslike,
+                  ),
                 },
               ].map((item, index) => (
                 <div className="col-lg-4" key={index}>
@@ -225,5 +189,4 @@ const Weather_UI = () => {
     </div>
   );
 };
-
 export default Weather_UI;

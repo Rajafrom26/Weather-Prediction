@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import icons from "../../public/icons/icons";
+import icons from "../../public/icons/icons.js";
 import myContext from "../Contexts/myContext.jsx";
 import  myState  from "../Contexts/myState.jsx";
 
