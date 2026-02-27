@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useEffect, useCallback, useContext, useRef } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import myState from "../Contexts/myState.jsx";
@@ -11,19 +11,19 @@ const WeatherData = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [initialRender, setInitialRender] = useState(true);
 
-  const fetchWeather = useCallback(async () => {
+  const fetchWeather = useCallback(async (cityParam = query) => {
 
     const loaderStart = Date.now();
     setLoading(true);
 
      let toastId;
     if (!initialRender) {
-      toastId = toast.loading(`Fetching weather for ${query}...`);
+      toastId = toast.loading(`Fetching weather for ${cityParam}...`);
     }
 
     try {
       const { data } = await axios.get(
-        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${query}?unitGroup=metric&key=EJ6UBL2JEQGYB3AA4ENASN62J&contentType=json`,
+        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${cityParam}?unitGroup=metric&key=EJ6UBL2JEQGYB3AA4ENASN62J&contentType=json`,
       );
       
       setDetails(data);
@@ -33,7 +33,7 @@ const WeatherData = ({ children }) => {
         });
       }
 
-    } catch (error) {
+    } catch {
       if (toastId) {
         toast.error("City not found or network error", { id: toastId });
       } else {
@@ -54,9 +54,16 @@ const WeatherData = ({ children }) => {
     }
   }, [query, setDetails, initialRender]);
 
+  // prevent duplicate network calls caused by StrictMode mounting twice
+  const fetchedOnceRef = useRef(false);
+
   useEffect(() => {
-    fetchWeather();
-  }, []);
+    if (fetchedOnceRef.current) return;
+    if (query) {
+      fetchWeather();
+      fetchedOnceRef.current = true;
+    }
+  }, [query, fetchWeather]);
 
   return (
     <WeatherContext.Provider

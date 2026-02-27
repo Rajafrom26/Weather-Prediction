@@ -30,10 +30,11 @@ const Weather_UI = () => {
   }, [details]);
 
   useEffect(() => {
-  if (!loading && details) {
-    setInput("");
-  }
-}, [loading, details]);
+    if (!loading && details) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setInput("");
+    }
+  }, [loading, details]);
 
   return (
     <div
@@ -52,8 +53,8 @@ const Weather_UI = () => {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   if (!input.trim()) return;
+                  fetchData(input.trim());
                   setCity(input.trim());
-                  fetchData();
                 }
               }}
               className="form-control"
@@ -63,8 +64,8 @@ const Weather_UI = () => {
               className="btn-dev"
               onClick={() => {
                 if (!input.trim()) return;
+                fetchData(input.trim());
                 setCity(input.trim());
-                fetchData();
               }}
               disabled={loading}
             >

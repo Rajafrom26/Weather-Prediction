@@ -2,11 +2,11 @@ import React, { useContext } from "react";
 import Weather_UI from "../Weather_UI";
 import WeatherLoader from "../WeatherLoader";
 import WeatherContext from "../../Contexts/WeatherContext";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion as Motion } from "framer-motion";
 
 const PredictionComp = () => {
 
-  const [loading,initialRender,,] = useContext(WeatherContext);
+  const [loading, initialRender] = useContext(WeatherContext);
 
   const showLoader = loading && initialRender;
 
@@ -14,7 +14,7 @@ const PredictionComp = () => {
   return (
     <AnimatePresence mode="wait">
       {showLoader ? (
-        <motion.div
+        <Motion.div
           key="loader"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -22,16 +22,16 @@ const PredictionComp = () => {
           transition={{ duration: 0.4 }}
         >
           <WeatherLoader /> 
-        </motion.div>
+        </Motion.div>
       ) : (
-        <motion.div
+        <Motion.div
           key="weather-ui"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <Weather_UI />
-        </motion.div>
+        </Motion.div>
       )}
     </AnimatePresence>
   )
