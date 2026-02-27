@@ -87,10 +87,7 @@ const WeatherLoader = () => {
         <text
           x="250"
           y="220"
-          textAnchor="middle"
-          fontFamily="Arial"
-          fontSize="15"
-          fill="#ffffff"
+          className="loader-text"
         >
           Loading Weather DashBoard.......
         </text>

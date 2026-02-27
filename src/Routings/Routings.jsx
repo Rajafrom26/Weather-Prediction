@@ -8,6 +8,7 @@ function Routings () {
     <Routes>
       <Route path='/' element={<WeekComp />} />
       <Route path='/today' element={<TodayComp />} />
+
     </Routes>
   )
 }

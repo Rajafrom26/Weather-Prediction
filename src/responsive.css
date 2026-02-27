@@ -1,52 +1,57 @@
 @media screen and (max-width: 768px) {
   .form-control {
-    width: 50% !important;
-    /* margin: 0 auto 0 auto; */
+    width: 60%;
   }
   .contain {
     border-radius: 10px;
-    /* margin-top: 10px; */
     gap: 10px;
   }
   .dev-design {
     border-radius: 10px;
     margin-bottom: 20px;
   }
-  .card-week {
-    margin: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  .medium {
+    display: none !important;
   }
-  /* .m4 {
-    margin: 10px 0;
-  } */
-  div.hour-card {
-    width: 90%;
+  .loader-text {
+    text-anchor: middle;
+    font-family: Arial;
+    font-size: 8.5px;
+    fill: #ffffff;
   }
 }
-
-  /* @media screen and (width: 320px) {
-    .form-control {
-      width: 70% !important;
-
-    }
-    .text-design {
-      width: 50%;
-      justify-self: self-end;
-    }
-    .dev-design {
-      height: 90vh;
-    }
-    .medium {
-      width: 50% !important;
-      font-size: 1rem;
-    }
-    .week-nav,
-    .today-nav {
-      font-size: 0.9rem;
-    }
+/* for tablet screens above 768px and below 1200px */
+/* Tablet: 769px - 1199px */
+@media screen and (min-width: 769px) and (max-width: 1199px) {
+  .form-control {
+    width: clamp(35%, 45vw, 50%);
+    max-width: 450px;
+    margin-inline: clamp(50px, 12vw, 120px) auto;
+    /* display: block; */
   }
-  @media screen and (max-width: 375px) {
-    .form-control {
-      width: 100% !important;
-    }
-} */
+
+  .contain {
+    border-radius: clamp(12px, 2vw, 16px);
+    margin-top: clamp(20px, 4vw, 28px);
+    margin-inline: auto;
+    max-width: 95%;
+  }
+  .dev-design {
+    border-radius: clamp(12px, 2vw, 16px);
+    margin-top: clamp(10px, 1.5vw, 15px);
+    margin-inline: auto;
+    max-width: 95%;
+  }
+  .loader-text {
+    text-anchor: middle;
+    font-family: Arial;
+    font-size: 12px;
+    fill: #ffffff;
+  }
+}
+.loader-text {
+  text-anchor: middle;
+  font-family: Arial;
+  /* font-size: 15px; */
+  fill: #ffffff;
+}

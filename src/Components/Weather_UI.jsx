@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import myState from "../Contexts/myState";
 import MyContext from "../Contexts/myContext";
 import Routings from "../Routings/Routings";
@@ -6,9 +6,10 @@ import icons from "../../public/icons/icons";
 import WeatherContext from "../Contexts/WeatherContext";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import BottomNav from "./mobileNav/BottomNav";
 
 const Weather_UI = () => {
-  const inputRef = React.useRef(null);
+  const inputRef = useRef(null);
   const [input, setInput] = useState("");
   const [, setCity, currentTime, weekName, details, , Hour, unit, setUnit] =
     useContext(myState);
@@ -21,6 +22,7 @@ const Weather_UI = () => {
   ] = useContext(MyContext);
 
   const [loading, , fetchData] = useContext(WeatherContext);
+
 
   const weatherData = useMemo(() => {
     const condition = details?.currentConditions?.icon;
@@ -43,6 +45,7 @@ const Weather_UI = () => {
           <div className="col-lg-3 dev-design">
             <input
               type="text"
+              ref={inputRef}
               placeholder="Type city here"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -80,7 +83,7 @@ const Weather_UI = () => {
                   {weekName} {currentTime}
                 </h6>
                 <hr />
-                <span className="text-design d-grid justify-content-center text-black">
+                <span className="text-design">
                   <p>{details.currentConditions?.conditions}</p>
                   <p>perc : {details.currentConditions?.precip ?? "Null"}</p>
                 </span>
@@ -100,7 +103,7 @@ const Weather_UI = () => {
                 </Link>
               </div>
 
-              <div className="col-md-3 medium">
+              <div className="col-md-3 medium d-flex justify-content-end me-auto">
                 <button
                   className={`btn-nav me-2 ${
                     unit === "C" ? "btn rounded-5 btn-dark" : "btn-light"
@@ -185,6 +188,9 @@ const Weather_UI = () => {
             </footer>
           </div>
         </div>
+      </div>
+      <div className="d-md-none">
+        <BottomNav focusSearch = {() => inputRef.current?.focus()} />
       </div>
     </div>
   );
